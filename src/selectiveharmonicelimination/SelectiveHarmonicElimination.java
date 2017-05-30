@@ -216,6 +216,7 @@ public class SelectiveHarmonicElimination {
    * @return a new angles vector which in the the neighborhood of the current vector.
    */
     public static Double[] Neighbor(final Double [] a){
+        //TODO test this method to ensure mutation preserves the axiom
         double value;
         Double b[]=new Double[a.length]; //copy array
         for (int i = 0; i < a.length; i++) {
@@ -224,12 +225,13 @@ public class SelectiveHarmonicElimination {
         //select angle to be modified   
         int index=r.nextInt(a.length);
         if (index == 0){//first angle
-            value=a[index]+r.nextDouble()*(a[index+1]-a[index]);
+            value=r.nextDouble()*a[index+1];
         }else if (index < a.length-1){ //the general case
-            value=a[index]+r.nextDouble()*(a[index+1]-a[index-1])-(a[index+1]-a[index]);
+            value=a[index-1]+r.nextDouble()*(a[index+1]-a[index-1]);
         }else{//last angle
-            value=a[index]-r.nextDouble()*(a[index]-a[index-1]);
+            value=a[index-1]+r.nextDouble()*(Math.PI/2.0 - a[index-1]);
         }
+        b[index]=value;//update mutated value
         return b;
     }  
     
@@ -244,17 +246,40 @@ public class SelectiveHarmonicElimination {
         Double cx;
         Double y[];
         Double cy;
-        int tmax=10000000;// a big number
+        int tmax=100000;// a big number
         int t=0;
         x= initialSolution(n);
+        
+        System.out.println("initial solution: ");    
+        for (int i = 0; i < x.length; i++) 
+            System.out.print(" "+x[i]);
+        System.out.print("\ncosto: "+SelectiveHarmonicElimination.cost(x));        
+        System.out.println();
+        
         cx=cost(x);
-        while(cx>0.0 || t>tmax){ //if we found the solution or if we spent too much time
+        while(cx>0.0 && t<tmax){ //if we found the solution or if we spent too much time
             y=Neighbor(x);
+            y=Neighbor(y);
+            y=Neighbor(y);
+            y=Neighbor(y);
+            y=Neighbor(y);
             cy=cost(y);
             if(cy<cx){
-                cy=cx;
+                cx=cy;
                 x=y;
             }
+        
+//        System.out.print("x: ");    
+//        for (int i = 0; i < x.length; i++) 
+//            System.out.print(" "+x[i]);
+//        System.out.print(" costo: "+SelectiveHarmonicElimination.cost(x));
+//        System.out.print(" | ");        
+//        System.out.print("y: ");    
+//        for (int i = 0; i < y.length; i++) 
+//            System.out.print(" "+y[i]);
+//        System.out.println("\tcosto: "+SelectiveHarmonicElimination.cost(y));
+        
+            t++;
         }
         return x;
     }
