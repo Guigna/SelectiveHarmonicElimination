@@ -5,6 +5,7 @@
  */
 package selectiveharmonicelimination;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Random;
  */
 public class SelectiveHarmonicElimination {
 
-    Random r;
+    static Random r=new Random();
     Double a[]; //factores
     
     final Double M = 1.0; // en una primera instancia trabajar con M igual a 1
@@ -96,7 +97,7 @@ public class SelectiveHarmonicElimination {
      * @param k 
      * @return 
      */
-    public static Double getV(Double alpha[],int k){
+    public static Double getV(final Double alpha[],int k){
         Double V=0.0;
             for (Double angle:alpha) {
                 //sb.append("\\cos(").append(value).append("\\alpha_{").append(i).append("})") ;    
@@ -106,7 +107,7 @@ public class SelectiveHarmonicElimination {
         }
 
 
-    public void EvaluateEquations(int alpha[]){
+    public void EvaluateEquations(final int alpha[]){
         int values[]={1,5,7,11,13,17,19,23,25,29,31,35,37};
         //sb.append("\\begin{align*}").append("\n");
         Double sum;
@@ -129,7 +130,7 @@ public class SelectiveHarmonicElimination {
     
     /**
      * algoritmo para calcular THD
-        V se calcula a traves de la ecuacion de coseno, usando ese formato
+        V se calcula a través de la ecuacion de coseno, usando ese formato
         calcular los V para los 50 primeros termino (desde el 2) (ya sabemos que algunos son cero)
         cada uno de los V se eleva al cudrado
         se suman los cuadrados.multiplico por 100 divido 1300
@@ -137,7 +138,7 @@ public class SelectiveHarmonicElimination {
      * @param alpha
      * @return
      */
-    public static Double computeTHD(Double alpha[]){
+    public static Double computeTHD(final Double alpha[]){
         final int KMax=50;
         final int E=1300;
         Double v;
@@ -155,7 +156,7 @@ public class SelectiveHarmonicElimination {
         
         
     /**
-     * the cost is a funcition f() that will be zero when alpha is a solution for the equations in the paper.
+     * the cost is a function f() that will be zero when alpha is a solution for the equations in the paper.
      * this is achieved by computing a seudo dot product. the steps are as follows:
      * Vectors V_i are computed for i between 1 to 13 using the formula Vi= Math.cos(k * alpha1);.
      * the first vector, V_1, computing the square value and subtracting N*M*PI/4.
@@ -163,7 +164,7 @@ public class SelectiveHarmonicElimination {
      * @param alpha
      * @return
      */
-    public static Double cost(Double alpha[]){
+    public static Double cost(final Double alpha[]){
         int values[]={1,5,7,11,13,17,19,23,25,29,31,35,37};
         Double v;
         Double sumSquare=0.0;
@@ -194,7 +195,68 @@ public class SelectiveHarmonicElimination {
     }
 
     
+    /**
+     * The new vector in created at random, respecting the property that ai<a_j for all i<j, and that a_0<=0 and a_n>pi/2.
+     * @param n the number of angles to consider
+     * @return the newly generated angles vector
+     */
+    public static Double[] initialSolution(int n){
+        //rabdomly generate n numbers between 0 and pi/2
+        Double a[]=new Double[n];
+        for (int i = 0; i < n; i++) {
+            a[i]=r.nextDouble()*Math.PI/2.0;
+        }
+        Arrays.sort(a);// soort elements to respect the rules of the angles.
+        return a;
+    }  
    
+  /**
+   * Creates a vector based on the current one. The new vector will have one modified angle.
+   * @param a the current angles vector
+   * @return a new angles vector which in the the neighborhood of the current vector.
+   */
+    public static Double[] Neighbor(final Double [] a){
+        double value;
+        Double b[]=new Double[a.length]; //copy array
+        for (int i = 0; i < a.length; i++) {
+            b[i]=new Double(a[i]);
+        }
+        //select angle to be modified   
+        int index=r.nextInt(a.length);
+        if (index == 0){//first angle
+            value=a[index]+r.nextDouble()*(a[index+1]-a[index]);
+        }else if (index < a.length-1){ //the general case
+            value=a[index]+r.nextDouble()*(a[index+1]-a[index-1])-(a[index+1]-a[index]);
+        }else{//last angle
+            value=a[index]-r.nextDouble()*(a[index]-a[index-1]);
+        }
+        return b;
+    }  
     
+    
+    /**
+     * Local search heuristic for solving the angles vector equation.
+     * @param n the number of angles to be considered
+     * @return an array with n angles which is a solution for the angles equations. 
+     */
+    public static Double[] findSolution(int n){
+        Double x[];
+        Double cx;
+        Double y[];
+        Double cy;
+        int tmax=10000000;// a big number
+        int t=0;
+        x= initialSolution(n);
+        cx=cost(x);
+        while(cx>0.0 || t>tmax){ //if we found the solution or if we spent too much time
+            y=Neighbor(x);
+            cy=cost(y);
+            if(cy<cx){
+                cy=cx;
+                x=y;
+            }
+        }
+        return x;
+    }
     
 }
