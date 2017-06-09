@@ -17,7 +17,7 @@ public class SelectiveHarmonicElimination {
     static Random r=new Random();
     Double a[]; //factores
     
-    final static Double M = 1.0; // en una primera instancia trabajar con M igual a 1
+    final Double M = 1.0; // en una primera instancia trabajar con M igual a 1
     
     
     public Double thd[]={0.0589,0.1019,0.1974,0.2922,0.3815,0.4266,0.5322,0.6146,0.7529,0.8173,0.943,1.0854,1.2725};
@@ -40,8 +40,6 @@ public class SelectiveHarmonicElimination {
             for (int i = 0; i < a.length; i++) {
                 a[i]=r.nextDouble()*Math.PI/2.0;
             }
-            //sort elements
-            Arrays.sort(a);
     }        
    
      /**
@@ -59,10 +57,9 @@ public class SelectiveHarmonicElimination {
          */
         public SelectiveHarmonicElimination(int seed,Double a[]){
             this.n=a.length;
-            this.a=new Double[n];
             r=new Random(seed);
             for (int i = 0; i < a.length; i++) {
-                this.a[i]=a[i];//copy the given values
+                a[i]=r.nextDouble()*Math.PI/2.0;
             }
     }
         
@@ -110,14 +107,6 @@ public class SelectiveHarmonicElimination {
         }
 
 
-    
-    /**
-     * Cost function, evaluates all the equations in the system. 
-     * substract M*Math.PI/4 to the first equation.
-     * @param alpha 
-     * @return zero if the alphas constitute a solution for the equations
-     */
-    
     public void EvaluateEquations(final int alpha[]){
         int values[]={1,5,7,11,13,17,19,23,25,29,31,35,37};
         //sb.append("\\begin{align*}").append("\n");
@@ -188,7 +177,7 @@ public class SelectiveHarmonicElimination {
                 //System.out.println("v_"+k+"= "+v);
             
             if(k==1)
-                v-=(Math.PI*M*alpha.length)/4.0;
+                v-=(Math.PI*1*13)/4.0;
             sumSquare+=v*v;
             }
         return sumSquare;
