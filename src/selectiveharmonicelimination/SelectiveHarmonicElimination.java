@@ -140,22 +140,24 @@ public class SelectiveHarmonicElimination {
          */
         final int KMax = 50;
         final int E = 1300; // este numero tiene que ver con la amplitud de la señal
-        Double v; //voltaje
+        Double v=0.0; //voltaje
         Double sumSquare = 0.0;
         //para calcular el thd se parte desde el tercer indice (que en el caso de java es k=2, puesto que el primero es k=0, el segundo es k=1; pero el segundo es par) recorriendo solo los indices impares (pares en java)
         //hasta el indice 50. que por esta razon el indice 50 queda excluido.
         
-        for (int k = 3; k <= KMax; k+=2) { //esta saltandose el primer voltaje que se calcula a partir de los angulos
+       // for (int k = 3; k <= KMax; k+=2) { //esta saltandose el primer voltaje que se calcula a partir de los angulos
+        for (int k = 2; k <= KMax; k++) { //esta saltandose el primer voltaje que se calcula a partir de los angulos
             v = 0.0;
             for (Double alpha1 : alpha) { //considera los 13 alpha
                 v += Math.cos(k * alpha1);
             }
-            
-            v=v*4*M/(Math.PI*(k+1));             
-            //System.out.println("v_"+k+"= "+v);
             sumSquare += v * v;
-        }
-        return 100 * Math.sqrt(sumSquare) / E;
+        }    
+            //v=v*4*M/(Math.PI*k);             
+            //System.out.println("v_"+k+"= "+v);
+            //sumSquare += v * v;
+        
+        return 100* Math.sqrt(sumSquare) / E;
     }
 
     /**
