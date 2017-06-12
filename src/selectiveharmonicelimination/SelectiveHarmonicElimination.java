@@ -192,7 +192,7 @@ THD=sqrt(f)/V1*100;
      * the equations in the paper. this is achieved by computing a seudo dot
      * product. the steps are as follows: Vectors V_i are computed for i between
      * 1 to 13 using the formula Vi= Math.cos(k * alpha1);. the first vector,
-     * V_1, computing the square value and subtracting N*M*PI/4. The
+     * V_1, cofgmputing the square value and subtracting N*M*PI/4. The
      *
      * @param alpha
      * @return
