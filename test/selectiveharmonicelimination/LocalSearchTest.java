@@ -18,7 +18,7 @@ public class LocalSearchTest {
     //
     @Test
     public void testFindSolution() {
-        Double sol[]=SelectiveHarmonicElimination.localSearch(13);
+        Double sol[]=SelectiveHarmonicElimination.localSearch(4);
         //Arrays.toString(sol);
         //System.out.println("OK"+sol);
         for (int i = 0; i < sol.length; i++) {

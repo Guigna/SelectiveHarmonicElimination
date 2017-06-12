@@ -36,6 +36,7 @@ public class THDTest {
      * @param alpha
      * @return 
      */
+    //@Ignore
     @Test
        public void ZeroTest(){
         int valuesThatAreSuposedToBeZero[]={1,5,7,11,13,17,19,23,25,29,31,35,37};
@@ -80,7 +81,7 @@ public class THDTest {
 //Ángulos:
 //0.2039    0.5442    1.0224
 //THD = 11.8954
-double epsilon=0.01; 
+double epsilon=0.001; 
 Double angulos3[]={0.2039,    0.5442,    1.0224};
 assertEquals(11.8954,SelectiveHarmonicElimination.computeTHD(angulos3),epsilon);
 
@@ -98,7 +99,7 @@ assertEquals(9.0579,SelectiveHarmonicElimination.computeTHD(angulos4),epsilon);
 //Ángulos:
 //0.1372    0.3381    0.5175    0.8322    1.1033
 //THD = 7.4710
- Double angulos5[]={};
+ Double angulos5[]={0.1372, 0.3381,    0.5175,    0.8322,    1.1033};
 assertEquals(7.4710,SelectiveHarmonicElimination.computeTHD(angulos5),epsilon);
 
 

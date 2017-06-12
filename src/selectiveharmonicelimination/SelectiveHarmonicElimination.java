@@ -131,34 +131,61 @@ public class SelectiveHarmonicElimination {
      * @param alpha
      * @return
      */
-    public static Double computeTHD(final Double alpha[]) {
+    public static Double computeTHD(final Double[] alpha) {
 
-        /**
-         * v_1 = f(alpha1,alpha2,...,alpha13) este es el V que uno se salta v_2
-         * = f(alpha1,alpha2,...,alpha13) ... v_50 =
-         * f(alpha1,alpha2,...,alpha13)
-         */
+/*
+        function THD = myfun(x)
+         global M
+        f=0;
+        for i=1:2:50
+        COS=0;
+        for j=1:length(x)
+            COS=COS+cos(i*x(j));   
+        end
+        V=4/pi*M/i*COS;
+        if(i==1)
+            V1=V;
+        else
+            f = f + V^2;
+        end
+        end
+ 
+THD=sqrt(f)/V1*100;
+        */
+
+
         final int KMax = 50;
-        final int E = 1300; // este numero tiene que ver con la amplitud de la señal
-        Double v=0.0; //voltaje
+        //final int E = 1300; // este numero tiene que ver con la amplitud de la señal
+        Double V1=0.0;
+        Double COS=0.0; //voltaje
         Double sumSquare = 0.0;
         //para calcular el thd se parte desde el tercer indice (que en el caso de java es k=2, puesto que el primero es k=0, el segundo es k=1; pero el segundo es par) recorriendo solo los indices impares (pares en java)
         //hasta el indice 50. que por esta razon el indice 50 queda excluido.
         
-       // for (int k = 3; k <= KMax; k+=2) { //esta saltandose el primer voltaje que se calcula a partir de los angulos
-        for (int k = 2; k <= KMax; k++) { //esta saltandose el primer voltaje que se calcula a partir de los angulos
-            v = 0.0;
-            for (Double alpha1 : alpha) { //considera los 13 alpha
-                v += Math.cos(k * alpha1);
+        Double V=0.0;
+        
+        for (int i = 1; i <= KMax; i+=2) { //esta saltandose el primer voltaje que se calcula a partir de los angulos
+            COS = 0.0;
+            //for (Double x : alpha) { //considera los 13 alpha
+            for (int j = 0; j < alpha.length; j++) {
+                
+                COS = COS + Math.cos(i * alpha[j]);
             }
-            sumSquare += v * v;
+            V=COS*4*M/(Math.PI*i);
+            if(i==1)
+                V1=V;
+            else
+                sumSquare = sumSquare + V * V;
         }    
             //v=v*4*M/(Math.PI*k);             
             //System.out.println("v_"+k+"= "+v);
             //sumSquare += v * v;
         
-        return 100* Math.sqrt(sumSquare) / E;
+        return 100* Math.sqrt(sumSquare) / V1;
     }
+    
+    
+    
 
     /**
      * the cost is a function f() that will be zero when alpha is a solution for
@@ -257,7 +284,7 @@ public class SelectiveHarmonicElimination {
         Double cx;
         Double y[];
         Double cy;
-        int tmax = 10000000;// a big number
+        int tmax = 1000000;// a big number
         int t = 0;
         x = initialSolution(n);
 
@@ -272,9 +299,9 @@ public class SelectiveHarmonicElimination {
         while (cx > 0.0 && t < tmax) { //if we found the solution or if we spent too much time
             y = Neighbor(x);
             y = Neighbor(y);
-            y = Neighbor(y);
-            y = Neighbor(y);
-            y = Neighbor(y);
+            //y = Neighbor(y);
+            //y = Neighbor(y);
+            //y = Neighbor(y);
             cy = cost(y);
             if (cy < cx) {
                 cx = cy;
