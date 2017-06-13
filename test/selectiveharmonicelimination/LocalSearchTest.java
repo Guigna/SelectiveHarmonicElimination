@@ -5,6 +5,7 @@
  */
 package selectiveharmonicelimination;
 
+import java.util.Random;
 import org.junit.Test;
 
 /**
@@ -18,15 +19,17 @@ public class LocalSearchTest {
     //
     @Test
     public void testFindSolution() {
-        Double sol[]=SelectiveHarmonicElimination.localSearch(4);
+        Random r=new Random();
+        SelectiveHarmonicElimination she=new SelectiveHarmonicElimination(r, 4, new SimpleRandomNeighborhood(r));
+        Double sol[]=she.localSearch(4);
         //Arrays.toString(sol);
         //System.out.println("OK"+sol);
         for (int i = 0; i < sol.length; i++) {
             System.out.print(" "+sol[i]);
         }
         System.out.println();
-        System.out.println("costo: "+SelectiveHarmonicElimination.cost(sol));
-        System.out.println("THD: "+SelectiveHarmonicElimination.computeTHD(sol));
+        System.out.println("costo: "+she.cost(sol));
+        System.out.println("THD: "+she.computeTHD(sol));
     }
     
 }
