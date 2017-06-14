@@ -22,6 +22,11 @@ import org.knowm.xchart.style.Styler.LegendPosition;
  */
 public class XChartSwingExample {
     public static void main(String[] args) {
+        
+        
+        //more examples here
+        //https://index.pocketcluster.io/timmolter-xchart.html
+        
            // Create Chart
     final XYChart chart = new XYChartBuilder().width(600).height(400).title("Area Chart").xAxisTitle("X").yAxisTitle("Y").build();
 
