@@ -5,7 +5,9 @@
  */
 package selectiveharmonicelimination;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -13,6 +15,13 @@ import java.util.Random;
  * @author castudillo
  */
 public class SelectiveHarmonicElimination {
+    
+    //double [] time; //time at which best values are recorded
+    //double [] best; // best so far
+    
+    List<Double> time;
+    List<Double> best;
+    
     SHENeighborhood neighborhood;
      Random r = new Random();
     Double a[]; //factores
@@ -238,7 +247,12 @@ THD=sqrt(f)/V1*100;
         Double cx;
         Double y[];
         Double cy;
+        
         int tmax = 1000000;// a big number
+        
+        time=new ArrayList<Double>(); //for recording bestvalues
+        best=new ArrayList<Double>();
+        
         int t = 0;
         x = initialSolution(n);
 
@@ -256,6 +270,8 @@ THD=sqrt(f)/V1*100;
             if (cy < cx) {
                 cx = cy;
                 x = y;
+                best.add(cx);
+                time.add(new Double(t));
             }
 
 //        System.out.print("x: ");    
@@ -272,4 +288,23 @@ THD=sqrt(f)/V1*100;
         return x;
     }
 
+    
+    public double[] getTime(){
+        double[] timeUnbox=new double[time.size()];
+        for (int i = 0; i < timeUnbox.length; i++) {
+            timeUnbox[i]=time.get(i);
+        }
+       //return (Double[]) time.toArray();
+       return timeUnbox;
+    }
+    
+    public double[] getBest(){
+        double[] bestUnbox=new double[best.size()];
+        for (int i = 0; i < bestUnbox.length; i++) {
+            bestUnbox[i]=best.get(i);
+        }
+       //return (Double[]) time.toArray();
+       return bestUnbox;
+
+    }
 }
