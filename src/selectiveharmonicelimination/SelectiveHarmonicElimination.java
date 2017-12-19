@@ -87,9 +87,14 @@ double []THD={30.01895505922690,16.43767607768410,11.04648404636570,8.3499175296
         this.neighborhood=neighborhood;
         this.r = r;
         a = new Double[n];
-        for (int i = 0; i < a.length; i++) {
-            a[i] = r.nextDouble() * Math.PI / 2.0;
-        }
+        
+        
+        //for (int i = 0; i < a.length; i++) {
+        //    a[i] = r.nextDouble() * Math.PI / 2.0;
+        //}
+
+        
+        
     }
 
 
@@ -266,10 +271,18 @@ THD=sqrt(f)/V1*100;
     public Double[] initialSolution(int n) {
         //rabdomly generate n numbers between 0 and pi/2
         Double a[] = new Double[n];
+        
+//        for (int i = 0; i < n; i++) {
+//            a[i] = r.nextDouble() * Math.PI / 2.0;
+//        }
+//        Arrays.sort(a);// soort elements to respect the rules of the angles.
+                
+        //copy stored intial solution
         for (int i = 0; i < n; i++) {
-            a[i] = r.nextDouble() * Math.PI / 2.0;
+            assert(angles[n-1].length==n);
+            a[i]=new Double(angles[n-1][i]);
         }
-        Arrays.sort(a);// soort elements to respect the rules of the angles.
+        
         return a;
     }
 
@@ -306,7 +319,13 @@ THD=sqrt(f)/V1*100;
         cx = cost(x);
         while (cx > 0.0 && t < tmax) { //if we found the solution or if we spent too much time
             y=neighborhood.nextNeighbor(x);
+            
             cy = cost(y);
+            /**
+             * WE are replacing THD for the trigonometric function optimization
+             */
+//            cy = computeTHD(y);
+            
             if (cy < cx) {
                 cx = cy;
                 x = y;
